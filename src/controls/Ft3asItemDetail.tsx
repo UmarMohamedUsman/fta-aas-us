@@ -3,7 +3,7 @@ import React from "react";
 import { FormEvent, useEffect, useState } from "react";
 import { ICheckItemAnswered } from "../model/ICheckItem";
 import { IStatus } from "../model/IStatus";
-
+import './ItemDetail.css';
 const horizontalGapStackTokens: IStackTokens = {
     childrenGap: 10,
     padding: 10,
@@ -151,9 +151,16 @@ export default function Ft3asItemDetail(props: Ft3asItemDetailProps) {
     const nextIcon: IIconProps = { iconName: 'Next' };
     const previousIcon: IIconProps = { iconName: 'Previous' };
     const removeIcon: IIconProps = { iconName: 'Clear' };
-
+    const handleClickOutside = () => {
+        onDiscard();
+    }
+    const handleClickInsidePanel = (e:any) => {
+        e.stopPropagation();
+    }
     return (
-        <Stack horizontal tokens={{
+        <div className="itemDetailsWrapper" onClick={handleClickOutside}>
+            <div className="itemDetails" onClick={handleClickInsidePanel}>
+                 <Stack horizontal tokens={{
             childrenGap: 20
         }}>
             <Stack.Item>
@@ -239,6 +246,9 @@ export default function Ft3asItemDetail(props: Ft3asItemDetailProps) {
                     onClick={onDiscard}
                 />
             </Stack.Item>
-        </Stack>);
+        </Stack>
+            </div>
+        </div>
+    )
 
 }

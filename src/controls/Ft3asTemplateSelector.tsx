@@ -20,12 +20,6 @@ export default function Ft3AsTemplateSelector(props: Ft3AsTemplateSelectorProps)
         const fetchData = async () => {
             await TemplateServiceInstance.init();
             const technologyNames = TemplateServiceInstance.getAvailableTemplateNames();
-            const languages = TemplateServiceInstance.getAvailableLanguagesforTemplate();
-            setAvailableLanguages(languages.map<IDropdownOption>(t => {
-                return {
-                    key: t, text: t
-                };
-            }));
             setAvailableTechnologies(technologyNames.map<IDropdownOption>(t => {
                 return {
                     key: t, text: t
@@ -45,9 +39,9 @@ export default function Ft3AsTemplateSelector(props: Ft3AsTemplateSelectorProps)
 
     const onOk = () => {
         if (selectedLanguageItem && selectedKeys?.length) {
-            let listOfUrl:any = [];
-            selectedKeys.forEach((val)=>{
-                const url : string = TemplateServiceInstance.getPathforTechAndLanguage(val?.text, selectedLanguageItem?.text);
+            let listOfUrl: any = [];
+            selectedKeys.forEach((val) => {
+                const url: string = TemplateServiceInstance.getPathforTechAndLanguage(val?.text, selectedLanguageItem?.text);
                 listOfUrl.push(url);
             })
             props.onMultiTemplateSelected(listOfUrl);
@@ -68,9 +62,33 @@ export default function Ft3AsTemplateSelector(props: Ft3AsTemplateSelectorProps)
 
     const onChangeOfTechMultiSelect = (event: React.FormEvent<HTMLDivElement>, item?: IDropdownOption): void => {
         if (item) {
+            let tempTechList = [];
+            if(item.selected){
+                tempTechList=[...selectedKeys, item]
+            }
+            else {
+                tempTechList= selectedKeys.filter(val => val?.key !== item.key)
+            }
+            const arrayOfTech = tempTechList.map(function (el) { return el.text; });
+            const listOfLang = TemplateServiceInstance.getAvailableLanguagesforSelectedTemplate(arrayOfTech)
+            const updatedFilteredLanguage = listOfLang?.map<IDropdownOption>(t => {
+                    return {
+                        key: t, text: t
+                    };
+                });
             setSelectedKeys(
-                item.selected ? [...selectedKeys, item ] : selectedKeys.filter(val => val?.key !== item.key),
+                tempTechList
             );
+            setAvailableLanguages(updatedFilteredLanguage);
+
+            if(tempTechList?.length){
+                const enItem = updatedFilteredLanguage?.find((val)=>val.key==="en");
+                setSelectedLanguageItem(Object.keys(enItem||{})?.length>0? enItem : updatedFilteredLanguage[0])
+            }
+            else {
+                setSelectedLanguageItem(undefined)
+                setAvailableLanguages([])
+            }
         }
     };
     const onChangeOfLanguage = (event: FormEvent<HTMLDivElement>, item?: IDropdownOption): void => {
@@ -88,7 +106,7 @@ export default function Ft3AsTemplateSelector(props: Ft3AsTemplateSelectorProps)
         <p>Service list</p>
         <Dropdown
             label="Select Service"
-            selectedKeys={selectedKeys?.map((item)=> String(item?.key??''))}
+            selectedKeys={selectedKeys?.map((item) => String(item?.key ?? ''))}
             options={availableTechnologies}
             placeholder="Select a Service"
             multiSelect

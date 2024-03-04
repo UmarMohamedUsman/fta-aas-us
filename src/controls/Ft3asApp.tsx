@@ -107,7 +107,7 @@ export default function Ft3asApp() {
     const downloadFile = (index:number) => {
         const fileName = `${getChecklistName(index)}.json`;
         const fileType = 'text/json';
-        const data = JSON.stringify(multiChecklistDoc?.[index])
+        const data = JSON.stringify(multiChecklistDoc)
 
         // Create a blob with the data we want to download as a file
         const blob = new Blob([data], { type: fileType })
@@ -166,7 +166,7 @@ export default function Ft3asApp() {
                         reader.onload = function (event) {
                             const contents = event?.target?.result
                             const doc = JSON.parse(contents as string) as IChecklistDocument
-                            updateDocument(doc);
+                            updateMultiDocument(doc);
                         };
 
                         (e.target as HTMLInputElement).value = ''
@@ -344,7 +344,7 @@ export default function Ft3asApp() {
             }
         }
     }
- 
+
     return (
         <>
             
@@ -381,7 +381,7 @@ export default function Ft3asApp() {
                                         />
                                     </PivotItem>
                                     <PivotItem headerText="Dashboard" itemIcon="BIDashboard">
-                                        <Ft3asCharts checklistDoc={checklistDoc} />
+                                        <Ft3asCharts checklistDoc={doc} />
                                     </PivotItem>
                                 </Pivot>
                             </FocusZone>
