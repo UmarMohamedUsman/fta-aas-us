@@ -33,10 +33,9 @@ const options: IDropdownOption[] = [
 ];
 
 interface Ft3asFiltersProps {
-  checklistDoc: IChecklistDocument;
-  index: number;
+  checklistDoc?: IChecklistDocument;
   isOpen: boolean;
-  categories?: ICategory[] ;
+  filterText?: string;
   wafChanged?: (selectedCategories: ICategory[]) => void;
   categoriesChanged?: (selectedCategories: ICategory[]) => void;
   severitiesChanged?: (selectedSeverities: ISeverity[]) => void;
@@ -46,9 +45,8 @@ interface Ft3asFiltersProps {
   onClose: () => void;
 }
 export default function Ft3asFilters(props: Ft3asFiltersProps) {
-  const {  severities, status, waf } = props.checklistDoc;
-  const {categories = []} = props
-  const { isOpen , index } = props;
+  const {  severities=[], status=[], waf=[], categories = [] } = props?.checklistDoc ?? {};
+  const { isOpen , filterText=''  } = props;
   const availableTags = categories.map<ITag>((c) => {
     return { key: c.name, name: c.name };
   });
@@ -407,6 +405,7 @@ const [excludedWaf, setExcludedWaf] = React.useState<ITag[]>(
       />
       <TextField
         label="Filter by name:"
+        value={filterText}
         onChange={_onChangeText}
         readOnly={false}
       />

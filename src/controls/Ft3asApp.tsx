@@ -385,21 +385,20 @@ export default function Ft3asApp() {
                                     </PivotItem>
                                 </Pivot>
                             </FocusZone>
-
-                            {showFilters ? (<Ft3asFilters
+                            </>
+                                ))}
+                            {multiChecklistDoc?.[0] ? (<Ft3asFilters
                                 isOpen={showFilters}
-                                index={index}
-                                checklistDoc={doc}
-                                categories={visibleCategories}
+                                checklistDoc={multiChecklistDoc?.[0]}
                                 wafChanged={setVisibleWaf}
                                 categoriesChanged={setVisibleCategories}
                                 severitiesChanged={setVisibleSeverities}
                                 statusesChanged={setVisibleStatuses}
+                                filterText={filterText}
                                 filterTextChanged={setFilterText}
                                 groupChange={setGroupingField}
                                 onClose={() => setShowFilters(false)}></Ft3asFilters>) : (<></>)}
-                                </>
-                                ))}
+                                
                                 <Ft3AsTemplateSelector
                                 onMultiTemplateSelected={onMultiTemplateSelected}
                                 isOpen={showSelectTemplate}
