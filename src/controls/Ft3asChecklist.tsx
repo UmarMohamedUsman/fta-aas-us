@@ -472,6 +472,7 @@ export class Ft3asChecklist extends React.Component<
         {currentItem ? (
           <Stack styles={stackStyles}>
             <Ft3asItemDetail
+              groupingField={this.props.groupingField}
               allowedStatus={this.props.checklistDoc?.status ?? []}
               item={currentItem}
               onItemChanged={this.onItemChanged.bind(this)}
